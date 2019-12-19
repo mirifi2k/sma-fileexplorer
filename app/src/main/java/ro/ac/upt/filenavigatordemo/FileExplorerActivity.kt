@@ -20,6 +20,7 @@ class FileExplorerActivity : AppCompatActivity() {
 
     private lateinit var fileExplorerViewModel : FileExplorerViewModel
     private val rvFiles: RecyclerView by lazy { findViewById<RecyclerView>(R.id.rcv_list_dir)}
+    private val rvAdapter: FilesRecyclerViewAdapter by lazy { FilesRecyclerViewAdapter(fileExplorerViewModel::openFile) }
     private val backButton: FloatingActionButton by lazy { findViewById<FloatingActionButton>(R.id.fab_back)}
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,14 +46,14 @@ class FileExplorerActivity : AppCompatActivity() {
 
         // TODO("Observe listedFiles's live data from view model and update the recycler view adapter on changes")
         fileExplorerViewModel.listedFiles.observe(this, Observer<List<FileEntry>> { files ->
-
+            rvAdapter.refreshFiles(files)
         })
     }
 
     private fun initWidgets() {
         // TODO("Initialize the layout manager and adapter of the recycler view widget")
         rvFiles.layoutManager = LinearLayoutManager(this)
-        rvFiles.adapter = FilesRecyclerViewAdapter()
+        rvFiles.adapter = rvAdapter
 
         // TODO("Initialize a click listener for back button such that once clicked, it would navigate one level up in current directory hierarchy")
         backButton.setOnClickListener {
