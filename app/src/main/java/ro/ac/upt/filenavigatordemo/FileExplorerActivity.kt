@@ -10,12 +10,17 @@ import kotlinx.android.synthetic.main.activity_file_explorer.*
 import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
 import android.os.Build
+import android.widget.Button
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class FileExplorerActivity : AppCompatActivity() {
 
     private lateinit var fileExplorerViewModel : FileExplorerViewModel
+    private val rvFiles: RecyclerView by lazy { findViewById<RecyclerView>(R.id.rcv_list_dir)}
+    private val backButton: FloatingActionButton by lazy { findViewById<FloatingActionButton>(R.id.fab_back)}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,20 +39,23 @@ class FileExplorerActivity : AppCompatActivity() {
 
     private fun initViewModelObservers() {
         // TODO("Observe currentPath's live data from view model and update txv_current_dir on changes")
+        fileExplorerViewModel.currentPath.observe(this, Observer<FileEntry> { fileEntry ->
+            txv_current_dir.text = fileEntry.path
+        })
 
         // TODO("Observe listedFiles's live data from view model and update the recycler view adapter on changes")
+        fileExplorerViewModel.listedFiles.observe(this, Observer<List<FileEntry>> { files ->
 
+        })
     }
 
     private fun initWidgets() {
         // TODO("Initialize the layout manager and adapter of the recycler view widget")
-        rcv_list_dir.layoutManager = LinearLayoutManager(this)
-        rcv_list_dir.adapter = FilesRecyclerViewAdapter(/* some onClick listener */)
+        rvFiles.layoutManager = LinearLayoutManager(this)
+        rvFiles.adapter = FilesRecyclerViewAdapter()
 
         // TODO("Initialize a click listener for back button such that once clicked, it would navigate one level up in current directory hierarchy")
-        val btn_back = findViewById(R.id.fab_back) as Button
-        
-        btn_back.setOnClickListener {
+        backButton.setOnClickListener {
             fileExplorerViewModel.onBack()
         }
     }
