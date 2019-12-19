@@ -19,12 +19,12 @@ class PlatformFileExplorer {
 
     fun hasParent(fileEntry: FileEntry): Boolean {
         // TODO("Check if current file entry has a parent directory")
-        return (Paths.get(fileEntry.path).getParent() != null)
+        return (Paths.get(fileEntry.path).parent != null)
     }
 
     fun getParent(fileEntry: FileEntry): FileEntry {
         // TODO("Return the parent of current file entry")
-        return FileEntry(Paths.get(fileEntry.path).getParent().toAbsolutePath().toString(), true)
+        return FileEntry(Paths.get(fileEntry.path).parent.toAbsolutePath().toString(), true)
     }
 
 }
